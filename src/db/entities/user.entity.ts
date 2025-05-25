@@ -6,10 +6,12 @@ import {
   Entity,
   Generated,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { hashPassword } from '../../common/lib/auth';
+import { LoginCounter } from './login-counter.entity';
 
 @Entity()
 export class User {
@@ -37,6 +39,9 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => LoginCounter, (loginCounter) => loginCounter.user)
+  loginCounter: LoginCounter[];
 
   @BeforeInsert()
   private async generateSaltAndHash?(): Promise<void> {

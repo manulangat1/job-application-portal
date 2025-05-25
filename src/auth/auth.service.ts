@@ -8,11 +8,13 @@ import { LoginUserDTO } from './dto/login-user.dto';
 import { compareHash } from '../common/lib/auth';
 import { plainToInstance } from 'class-transformer';
 import { LoginObjectDTO } from '../common/dto/loginResponseDTO';
+import { LoginCounterService } from '../login-counter/login-counter.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private loginCounterService: LoginCounterService,
   ) {}
 
   async create(dto: CreateUserDTO) {
@@ -60,8 +62,19 @@ export class AuthService {
       throw new BadRequestException('Bad credentials');
     }
 
+    // get login counter service
+    // let loginCounterService;
+    // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // loginCounterService = await this.loginCounterService.find(userExists.id);
+    // if (!loginCounterService) {
+    //   loginCounterService = await this.loginCounterService.create(userExists);
+    // }
+
+    // console.log(loginCounterService);
+
     const isPasswordMatch = await compareHash(userExists, password);
     if (!isPasswordMatch) {
+      await this.loginCounterService.addEmail(userExists);
       throw new BadRequestException('PASSWORDS_DO_NOT_MATCH');
     }
 
