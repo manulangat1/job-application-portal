@@ -4,3 +4,10 @@ export const _401 = {
     message: 'The origin is not allowed by CORS',
   },
 };
+
+export const _400 = {
+  USER_ALREADY_EXISTS: {
+    code: 'USER_ALREADY_EXISTS',
+    message: ' Email already in use',
+  },
+};
