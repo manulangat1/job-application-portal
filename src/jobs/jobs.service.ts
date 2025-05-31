@@ -19,6 +19,7 @@ export class JobsService {
       .where('applications.userId = :userId', {
         userId: user.id,
       })
+      .orderBy('applications.createdAt', 'DESC')
       .getMany();
 
     return applications;

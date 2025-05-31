@@ -11,3 +11,10 @@ export const _400 = {
     message: ' Email already in use',
   },
 };
+
+export const _500 = {
+  INTERNAL_SERVER_ERROR: {
+    code: 'INTERNAL_SERVER_ERROR',
+    message: 'Internal server error ',
+  },
+};

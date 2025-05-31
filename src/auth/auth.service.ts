@@ -58,40 +58,43 @@ export class AuthService {
 
   async login(dto: LoginUserDTO): Promise<any> {
     const { email, password } = dto;
-    const userExists = await this.userRepository
-      .createQueryBuilder('user')
-      .where('user.email = :email', { email })
-      .select([
-        'user.id',
-        // 'user.pkid',
-        'user.email',
-        'user.password',
-        'user.salt',
-        'user.createdAt',
-        'user.updatedAt',
-      ])
-      .getOne();
 
-    if (!userExists) {
-      // TODO: come and throw an appopriate error message
-      throw new BadRequestException('Bad credentials');
+    try {
+      const userExists = await this.userRepository
+        .createQueryBuilder('user')
+        .where('user.email = :email', { email })
+        .select([
+          'user.id',
+          // 'user.pkid',
+          'user.email',
+          'user.password',
+          'user.salt',
+          'user.createdAt',
+          'user.updatedAt',
+        ])
+        .getOne();
+
+      if (!userExists) {
+        // TODO: come and throw an appopriate error message
+        throw new BadRequestException('Bad credentials');
+      }
+
+      const isPasswordMatch = await compareHash(userExists, password);
+      if (!isPasswordMatch) {
+        await this.loginCounterService.addEmail(userExists);
+        throw new BadRequestException('PASSWORDS_DO_NOT_MATCH');
+      }
+
+      const data: LoginObjectDTO = plainToInstance(LoginObjectDTO, userExists);
+
+      // generate async token
+
+      const token = await this.generateAccessToken(userExists);
+
+      return this.generateLoginResponse(data, token);
+    } catch (error) {
+      console.error(error);
     }
-
-    const isPasswordMatch = await compareHash(userExists, password);
-    if (!isPasswordMatch) {
-      await this.loginCounterService.addEmail(userExists);
-      throw new BadRequestException('PASSWORDS_DO_NOT_MATCH');
-    }
-
-    const data: LoginObjectDTO = plainToInstance(LoginObjectDTO, userExists);
-
-    // generate async token
-
-    const token = await this.generateAccessToken(userExists);
-
-    console.log(token);
-
-    return this.generateLoginResponse(data, token);
   }
 
   async getUserById(id: number): Promise<User> {

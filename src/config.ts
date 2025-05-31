@@ -17,6 +17,11 @@ const config = {
   entities: ['dist/db/entities/**/*.entity.js'],
   autoLoadEntities: true,
   synchronize: false,
+  // ssl: true,
+  // DigitalOcean requires SSL, but with self-signed cert
+  ssl: {
+    rejectUnauthorized: false,
+  },
 };
 
 export default registerAs('typeorm', () => config);
