@@ -1,8 +1,18 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { LoginUserDTO } from './dto/login-user.dto';
+import { Public } from '../common/decorators/Public.decorator';
+import { User } from '../db/entities/user.entity';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -12,6 +22,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Sign up to use the jobzy application' })
   @ApiResponse({ status: 200, description: 'User created Successfully' })
   @Post()
+  @Public()
   async create(@Body() body: CreateUserDTO) {
     return this.authService.create(body);
   }
@@ -28,7 +39,18 @@ export class AuthController {
   })
   @Post('/login')
   @HttpCode(200)
+  @Public()
   async login(@Body() body: LoginUserDTO) {
     return this.authService.login(body);
+  }
+
+  @Get('/me/:id')
+  @ApiResponse({
+    status: 200,
+    description: ' Get the user',
+  })
+  @HttpCode(200)
+  async getUser(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
+    return this.authService.getUserById(id);
   }
 }

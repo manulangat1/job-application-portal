@@ -3,19 +3,34 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../db/entities/user.entity';
 import { Repository } from 'typeorm';
-import { _400 } from '../common/error.messages';
+import { _400 } from '../common/error/error.messages';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { compareHash } from '../common/lib/auth';
 import { plainToInstance } from 'class-transformer';
 import { LoginObjectDTO } from '../common/dto/loginResponseDTO';
 import { LoginCounterService } from '../login-counter/login-counter.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private loginCounterService: LoginCounterService,
+    private jwtService: JwtService,
   ) {}
+
+  generateAccessToken = (user: User): Promise<string> => {
+    const payload = { sub: user.id };
+    return this.jwtService.signAsync(payload);
+  };
+
+  generateLoginResponse(data: LoginObjectDTO, accessToken: string): any {
+    return {
+      message: 'Login success',
+      data,
+      accessToken,
+    };
+  }
 
   async create(dto: CreateUserDTO) {
     const { email, password, username } = dto;
@@ -62,16 +77,6 @@ export class AuthService {
       throw new BadRequestException('Bad credentials');
     }
 
-    // get login counter service
-    // let loginCounterService;
-    // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    // loginCounterService = await this.loginCounterService.find(userExists.id);
-    // if (!loginCounterService) {
-    //   loginCounterService = await this.loginCounterService.create(userExists);
-    // }
-
-    // console.log(loginCounterService);
-
     const isPasswordMatch = await compareHash(userExists, password);
     if (!isPasswordMatch) {
       await this.loginCounterService.addEmail(userExists);
@@ -80,10 +85,24 @@ export class AuthService {
 
     const data: LoginObjectDTO = plainToInstance(LoginObjectDTO, userExists);
 
-    return {
-      message: 'User sign in Successfully',
-      status: 'Success',
-      data,
-    };
+    // generate async token
+
+    const token = await this.generateAccessToken(userExists);
+
+    console.log(token);
+
+    return this.generateLoginResponse(data, token);
+  }
+
+  async getUserById(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) throw new BadRequestException('User not found');
+
+    return user;
   }
 }

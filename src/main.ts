@@ -12,7 +12,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { SWAGGER_DOCUMENTATION_PATH } from './common/constants/general.constants';
 import { getLogLevels } from './common/utils';
 import { isIn } from 'class-validator';
-import { _401 } from './common/error.messages';
+import { _401 } from './common/error/error.messages';
 import helmet from 'helmet';
 
 async function bootstrap() {
