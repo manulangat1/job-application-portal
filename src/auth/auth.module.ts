@@ -9,5 +9,6 @@ import { LoginCounterModule } from '../login-counter/login-counter.module';
   imports: [TypeOrmModule.forFeature([User]), LoginCounterModule],
   controllers: [AuthController],
   providers: [AuthService],
+  exports: [AuthService],
 })
 export class AuthModule {}

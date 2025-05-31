@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { hashPassword } from '../../common/lib/auth';
 import { LoginCounter } from './login-counter.entity';
+import { JobApplication } from './job.entity';
 
 @Entity()
 export class User {
@@ -42,6 +43,9 @@ export class User {
 
   @OneToMany(() => LoginCounter, (loginCounter) => loginCounter.user)
   loginCounter: LoginCounter[];
+
+  @OneToMany(() => JobApplication, (jobApplication) => jobApplication.user)
+  jobApplications: JobApplication[];
 
   @BeforeInsert()
   private async generateSaltAndHash?(): Promise<void> {
