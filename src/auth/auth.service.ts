@@ -7,7 +7,7 @@ import { _400 } from '../common/error/error.messages';
 import { LoginUserDTO } from './dto/login-user.dto';
 import { compareHash } from '../common/lib/auth';
 import { plainToInstance } from 'class-transformer';
-import { LoginObjectDTO } from '../common/dto/loginResponseDTO';
+import { LoginObjectDTO } from '../common/dto/login-response.dto';
 import { LoginCounterService } from '../login-counter/login-counter.service';
 import { JwtService } from '@nestjs/jwt';
 

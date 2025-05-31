@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
+  Index,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -22,6 +23,7 @@ export class JobApplication {
   pkid: string;
 
   @Column()
+  @Index()
   name: string;
 
   @Column({
@@ -34,6 +36,7 @@ export class JobApplication {
   @Column({
     type: 'enum',
     enum: JobApplicationRejectionStatus,
+    nullable: true,
   })
   description: JobApplicationRejectionStatus;
 
