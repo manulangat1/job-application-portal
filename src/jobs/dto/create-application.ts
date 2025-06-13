@@ -21,9 +21,4 @@ export class CreateJobApplicationDTO {
   @IsDateString()
   @IsNotEmpty()
   dateApplied: string;
-
-  //   @ApiProperty()
-  //   @IsString()
-  //   @IsNotEmpty()
-  //   name: string;
 }

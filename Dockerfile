@@ -1,0 +1,59 @@
+
+FROM node:22-slim AS builder 
+
+
+WORKDIR /usr/src/app 
+
+
+# Install build tools temporarily (needed for native modules)
+# RUN apk add --no-cache --virtual .build-deps \
+#     python3 \
+#     make \
+#     g++
+
+COPY package.json package*.json yarn.lock ./
+
+
+ENV YARN_IGNORE_PLATFORM=1
+
+
+
+RUN yarn install 
+
+
+COPY . .
+
+RUN yarn build 
+
+
+# Remove build dependencies to reduce layer size
+# RUN apk del .build-deps
+
+
+FROM node:22-alpine 
+
+
+WORKDIR /usr/src/app 
+
+
+# Create non-root user
+RUN addgroup -S appuser && adduser -S -G appuser appuser \
+    && chown -R appuser:appuser /usr/src/app
+
+
+# Copy only production files from builder
+COPY --from=builder --chown=appuser:appuser /usr/src/app/dist ./dist
+COPY --from=builder --chown=appuser:appuser /usr/src/app/node_modules ./node_modules
+
+
+USER appuser
+
+
+# Health check (optional but recommended)
+HEALTHCHECK --interval=30s --timeout=3s \
+    CMD curl -f http://localhost:3002/health || exit 1
+
+
+EXPOSE 3002  
+
+CMD [ "node", "dist/main" ]
