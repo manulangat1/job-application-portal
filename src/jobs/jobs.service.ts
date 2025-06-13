@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JobApplication } from '../db/entities/job.entity';
 import { Repository } from 'typeorm';
 import { User } from '../db/entities/user.entity';
 import { CreateJobApplicationDTO } from './dto/create-application';
 import { okResponse, OkResponse } from '../common/dto/ok-response.dto';
+import { UpdateApplicationDTO } from './dto/update-application.dto';
 
 @Injectable()
 export class JobsService {
@@ -33,6 +34,44 @@ export class JobsService {
     });
 
     await this.jobRepository.save(job);
+
+    return okResponse();
+  }
+
+  async update(
+    id: number,
+    user: User,
+    data: UpdateApplicationDTO,
+  ): Promise<OkResponse> {
+    const job = await this.jobRepository.findOne({
+      where: { id, user: { id: user.id } },
+    });
+
+    if (!job) throw new BadRequestException('Job not found');
+
+    await this.jobRepository
+      .createQueryBuilder('')
+      .update(JobApplication)
+      .where('id = :id', { id })
+      .set({
+        ...data,
+      })
+      .execute();
+
+    return okResponse();
+  }
+
+  async delete(id: number, user: User): Promise<OkResponse> {
+    const job = await this.jobRepository.findOne({
+      where: {
+        id,
+        user: { id: user.id },
+      },
+    });
+
+    if (!job) throw new BadRequestException('Job not found');
+
+    await this.jobRepository.softRemove(job);
 
     return okResponse();
   }
