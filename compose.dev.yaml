@@ -13,29 +13,9 @@ services:
       dockerfile: Dockerfile.dev
     image: manulangat/blog_by_langat:jobzy
     env_file:
-      - .env.testing
+      - .env
     ports:
       - 3002:3002
-
-    environment:
-      DATABASE_HOST: db
-      DATABASE_PORT: 5432
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: postgres
-      DATABASE_NAME: jobzy
-
-  db:
-    image: postgres:14
-    container_name: jobzy_db
-    restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: jobzy
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
   nginx:
     build:
