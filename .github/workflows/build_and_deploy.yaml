@@ -2,9 +2,9 @@ name: Continuous Integration and Delivery
 
 on:
   push:
-    branches: [main, feat-set-up-ci-cd]
+    branches: [main]
   pull_request:
-    branches: [main, feat-set-up-ci-cd]
+    branches: [main]
 
 jobs:
   testing-docker-compose:
