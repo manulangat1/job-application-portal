@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import {
+  Currency,
   JobApplicationRejectionStatus,
   JobApplicationStatus,
 } from '../../common/enums/common-enums.dto';
@@ -39,7 +40,14 @@ export class JobApplication {
     enum: JobApplicationRejectionStatus,
     nullable: true,
   })
-  description: JobApplicationRejectionStatus;
+  description: JobApplicationRejectionStatus | null;
+
+  // @Column({
+  //   type: 'enum',
+  //   enum: Currency,
+  //   default: Currency.KES,
+  // })
+  // currency: Currency;
 
   @Column()
   link: string;
