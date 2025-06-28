@@ -15,4 +15,12 @@ export enum JobApplicationStatus {
 export enum JobApplicationRejectionStatus {
   SALARY_MISMATCH = 'SALARY_MISMATCH',
   OPPORTUNITY_MISMATCH = 'OPPORTUNITY_MISMATCH',
+  NO_RESPONSE_FROM_RECRUITER = 'NO_RESPONSE_FROM_RECRUITER',
+}
+
+export enum Currency {
+  KES = 'KES',
+  USD = 'USD',
+  EURO = 'EURO',
+  POUND = 'POUND',
 }

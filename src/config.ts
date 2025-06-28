@@ -3,7 +3,7 @@ import { config as dotenvConfig } from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenvConfig({ path: '.env' });
-
+const isRemote = process.env.REMOTE_HOST === 'true';
 const config = {
   type: 'postgres',
   host: `${process.env.DATABASE_HOST}`,
@@ -17,11 +17,12 @@ const config = {
   entities: ['dist/db/entities/**/*.entity.js'],
   autoLoadEntities: true,
   synchronize: false,
-  // ssl: true,
-  // DigitalOcean requires SSL, but with self-signed cert
-  ssl: {
-    rejectUnauthorized: false,
-  },
+
+  ...(isRemote && {
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  }),
 };
 
 export default registerAs('typeorm', () => config);
