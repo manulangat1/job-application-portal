@@ -42,18 +42,18 @@ export class JobApplication {
   })
   description: JobApplicationRejectionStatus | null;
 
-  // @Column({
-  //   type: 'enum',
-  //   enum: Currency,
-  //   default: Currency.KES,
-  // })
-  // currency: Currency;
+  @Column({
+    type: 'enum',
+    enum: Currency,
+    default: Currency.KES,
+  })
+  currency: Currency;
 
   @Column()
   link: string;
 
   @Column('varchar')
-  expectedSalary: string;
+  expectedSalary: number;
 
   @Column('date')
   appliedDate: Date;

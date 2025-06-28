@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import {
+  IsDateString,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateJobApplicationDTO {
   @ApiProperty()
@@ -13,9 +19,9 @@ export class CreateJobApplicationDTO {
   link: string;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  expectedSalary: string;
+  expectedSalary: number;
 
   @ApiProperty()
   @IsDateString()
