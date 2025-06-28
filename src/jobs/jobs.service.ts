@@ -44,7 +44,7 @@ export class JobsService {
     user: User,
     data: UpdateApplicationDTO,
   ): Promise<OkResponse> {
-    const { status, description } = data;
+    const { status, description, expectedSalary, currency } = data;
     const job = await this.jobRepository.findOne({
       where: { id, user: { id: user.id } },
     });
@@ -62,6 +62,14 @@ export class JobsService {
 
     if (description) {
       job.description = description;
+    }
+
+    if (expectedSalary) {
+      job.expectedSalary = expectedSalary;
+    }
+
+    if (currency) {
+      job.currency = currency;
     }
 
     await this.jobRepository.save(job);
