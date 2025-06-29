@@ -7,6 +7,8 @@ import { CreateJobApplicationDTO } from './dto/create-application';
 import { okResponse, OkResponse } from '../common/dto/ok-response.dto';
 import { UpdateApplicationDTO } from './dto/update-application.dto';
 import { JobApplicationStatus } from '../common/enums/common-enums.dto';
+import { PaginationQueries } from './dto/job.query.dto';
+import { from, Observable } from 'rxjs';
 
 @Injectable()
 export class JobsService {
@@ -25,6 +27,20 @@ export class JobsService {
       .getMany();
 
     return applications;
+  }
+
+  find(queries: PaginationQueries, user: User): Observable<JobApplication[]> {
+    const { take, skip } = queries;
+    const data = from(
+      this.jobRepository.find({
+        take,
+        skip,
+        where: {
+          user: { id: user.id },
+        },
+      }),
+    );
+    return data;
   }
 
   async create(dto: CreateJobApplicationDTO, user: User): Promise<OkResponse> {
