@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { JobsService } from './jobs.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -16,6 +17,8 @@ import { User } from '../db/entities/user.entity';
 import { CreateJobApplicationDTO } from './dto/create-application';
 import { OkResponse } from '../common/dto/ok-response.dto';
 import { UpdateApplicationDTO } from './dto/update-application.dto';
+import { PaginationQueries } from './dto/job.query.dto';
+import { Observable } from 'rxjs';
 
 @Controller('jobs')
 @ApiTags('Jobs')
@@ -35,6 +38,17 @@ export class JobsController {
     return this.jobsService.getJobApplicationsByUser(user);
   }
 
+  @Get('/paginated')
+  @HttpCode(200)
+  @ApiOperation({
+    summary: 'Get all job applications made by a user',
+  })
+  getjobs(
+    @Query() queries: PaginationQueries,
+    @CurrentUser() user: User,
+  ): Observable<any> {
+    return this.jobsService.find(queries, user);
+  }
   @Post()
   @HttpCode(201)
   @ApiOperation({

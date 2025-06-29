@@ -16,13 +16,11 @@ import { _401 } from './common/error/error.messages';
 import helmet from 'helmet';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   const { port, environment } = app.get(AppconfigService);
 
   const isProductionEnvironment = environment === Environment.production;
-
-  // TODO: come and enable the global logger.
 
   app.useLogger(getLogLevels(isProductionEnvironment));
 
