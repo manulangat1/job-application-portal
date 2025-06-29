@@ -30,6 +30,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
   providers: [AppconfigService],
-  exports: [JwtModule],
+  exports: [JwtModule, AppconfigService],
 })
 export class AppconfigModule {}

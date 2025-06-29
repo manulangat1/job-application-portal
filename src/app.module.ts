@@ -8,15 +8,19 @@ import { JobsModule } from './jobs/jobs.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/JwtAuthGuard';
 import { ProfileModule } from './profile/profile.module';
+// import { LoggerModule } from 'nestjs-pino';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
+    // LoggerModule.forRoot(),
     HealthcheckModule,
     AppconfigModule,
     AuthModule,
     LoginCounterModule,
     JobsModule,
     ProfileModule,
+    LoggerModule,
   ],
   controllers: [],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
