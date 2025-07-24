@@ -9,13 +9,29 @@
 # https://github.com/docker/awesome-compose
 services:
   server:
-    build:
-      dockerfile: Dockerfile.dev
+    # build:
+    #   dockerfile: Dockerfile.dev
     image: manulangat/blog_by_langat:jobzy
     env_file:
       - .env.testing
     ports:
       - 3002:3002
+    # networks:
+    #   - webnet
+
+#   client: 
+#     image: manulangat/blog_by_langat:jobzy-client
+#     env_file:
+#       - .env 
+#     ports:
+#       - 5173:5173
+#     networks:
+#       - webnet
+
+# networks:
+#   webnet:
+#     external: true 
+#     name: webnet
 
     environment:
       DATABASE_HOST: db
@@ -37,40 +53,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    image: manulangat/blog_by_langat:jobzy-be-nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - server
-    restart: always
-    # volumes:
-    #   - web-root:/var/www/html
-    #   - ./nginx-conf:/etc/nginx/conf.d
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-  #     - web-root:/var/www/html
+  # nginx:
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: Dockerfile
+  #   image: manulangat/blog_by_langat:jobzy-be-nginx
+  #   ports:
+  #     - "80:80"
   #   depends_on:
-  #     - nginx
-  #   command: certonly --webroot --webroot-path=/var/www/html --email emmanuelthedeveloper@gmail.com --agree-tos --no-eff-email --staging -d jobs.kipchirchirlangat.com
+  #     - server
+  #   restart: always
 
     
 
 volumes:
   postgres_data:
-  # certbot-etc:
-  # certbot-var:
-  # web-root:
-  #   driver: local
 
-
+# networks:
+#   webnet:
+#     external: true 
+#     name: webnet
