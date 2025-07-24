@@ -1,12 +1,4 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
 
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services:
   server:
     build:
@@ -16,42 +8,24 @@ services:
       - .env
     ports:
       - 3002:3002
+    networks:
+      - webnet
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    image: manulangat/blog_by_langat:jobzy-be-nginx
-    ports:
-      - "80:80"
-    depends_on:
-      - server
-    restart: always
-  #   volumes:
-  #     - web-root:/var/www/html
-  #     - ./nginx-conf:/etc/nginx/conf.d
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - certbot-etc:/etc/letsencrypt
-  #     - certbot-var:/var/lib/letsencrypt
-  #     - web-root:/var/www/html
+  # nginx:
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: Dockerfile
+  #   image: manulangat/blog_by_langat:jobzy-be-nginx
+  #   ports:
+  #     - "80:80"
   #   depends_on:
-  #     - nginx
-  #   command: certonly --webroot --webroot-path=/var/www/html --email emmanuelthedeveloper@gmail.com --agree-tos --no-eff-email --staging -d jobs.kipchirchirlangat.com
+  #     - server
+  #   restart: always
 
 
-# volumes:
-#   postgres_data:
-  # certbot-etc:
-  # certbot-var:
-  # web-root:
-  #   driver: local
-   
+# networks:
+#   webnet:
+#     external: true
   
     
 
