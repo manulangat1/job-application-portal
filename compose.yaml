@@ -1,37 +1,15 @@
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Docker Compose reference guide at
-# https://docs.docker.com/go/compose-spec-reference/
 
-# Here the instructions define your application as a service called "server".
-# This service is built from the Dockerfile in the current directory.
-# You can add other services your application may depend on here, such as a
-# database or a cache. For examples, see the Awesome Compose repository:
-# https://github.com/docker/awesome-compose
 services:
   server:
-    # build:
-    #   dockerfile: Dockerfile.dev
+    build:
+      dockerfile: Dockerfile.dev
     image: manulangat/blog_by_langat:jobzy
     env_file:
       - .env.testing
     ports:
       - 3002:3002
-    # networks:
-    #   - webnet
 
-#   client: 
-#     image: manulangat/blog_by_langat:jobzy-client
-#     env_file:
-#       - .env 
-#     ports:
-#       - 5173:5173
-#     networks:
-#       - webnet
 
-# networks:
-#   webnet:
-#     external: true 
-#     name: webnet
 
     environment:
       DATABASE_HOST: db
@@ -53,23 +31,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # nginx:
-  #   build:
-  #     context: ./nginx
-  #     dockerfile: Dockerfile
-  #   image: manulangat/blog_by_langat:jobzy-be-nginx
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - server
-  #   restart: always
+
 
     
 
 volumes:
   postgres_data:
 
-# networks:
-#   webnet:
-#     external: true 
-#     name: webnet
