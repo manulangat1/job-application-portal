@@ -1,14 +1,14 @@
-import { Transform } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { IsInt, IsOptional } from 'class-validator';
 
 export class PaginationQueries {
   @IsOptional()
-  @Transform((take) => Number(take))
+  @Type(() => Number)
   @IsInt()
   take: number = 1;
 
   @IsOptional()
-  @Transform((skip) => Number(skip))
+  @Type(() => Number)
   @IsInt()
   skip: number = 0;
 }
