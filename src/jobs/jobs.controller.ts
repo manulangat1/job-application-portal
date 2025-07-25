@@ -18,7 +18,6 @@ import { CreateJobApplicationDTO } from './dto/create-application';
 import { OkResponse } from '../common/dto/ok-response.dto';
 import { UpdateApplicationDTO } from './dto/update-application.dto';
 import { PaginationQueries } from './dto/job.query.dto';
-import { Observable } from 'rxjs';
 
 @Controller('jobs')
 @ApiTags('Jobs')
@@ -46,7 +45,7 @@ export class JobsController {
   getjobs(
     @Query() queries: PaginationQueries,
     @CurrentUser() user: User,
-  ): Observable<any> {
+  ): Promise<any> {
     return this.jobsService.find(queries, user);
   }
   @Post()
