@@ -8,7 +8,6 @@ import { okResponse, OkResponse } from '../common/dto/ok-response.dto';
 import { UpdateApplicationDTO } from './dto/update-application.dto';
 import { JobApplicationStatus } from '../common/enums/common-enums.dto';
 import { PaginationQueries } from './dto/job.query.dto';
-import { from, Observable } from 'rxjs';
 
 @Injectable()
 export class JobsService {
@@ -29,18 +28,30 @@ export class JobsService {
     return applications;
   }
 
-  find(queries: PaginationQueries, user: User): Observable<JobApplication[]> {
+  async find(
+    queries: PaginationQueries,
+    user: User,
+  ): Promise<{ jobs: any[]; hasMore: boolean }> {
     const { take, skip } = queries;
-    const data = from(
-      this.jobRepository.find({
-        take,
-        skip,
-        where: {
-          user: { id: user.id },
-        },
-      }),
-    );
-    return data;
+
+    const data = await this.jobRepository.find({
+      take: take + 1,
+      skip,
+      where: {
+        user: { id: user.id },
+      },
+      order: { createdAt: 'DESC' },
+      relations: ['user'],
+    });
+
+    const jobs = data.slice(0, take);
+    const hasMore = data.length > take;
+    const res = {
+      jobs,
+      hasMore,
+    };
+
+    return res;
   }
 
   async create(dto: CreateJobApplicationDTO, user: User): Promise<OkResponse> {
