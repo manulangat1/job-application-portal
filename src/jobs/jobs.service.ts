@@ -8,6 +8,7 @@ import { okResponse, OkResponse } from '../common/dto/ok-response.dto';
 import { UpdateApplicationDTO } from './dto/update-application.dto';
 import { JobApplicationStatus } from '../common/enums/common-enums.dto';
 import { PaginationQueries } from './dto/job.query.dto';
+import { DashboardQuery } from '../dashboard/dto/DashboardQuery.dto';
 
 @Injectable()
 export class JobsService {
@@ -117,5 +118,27 @@ export class JobsService {
     await this.jobRepository.softRemove(job);
 
     return okResponse();
+  }
+
+  async findWithQueries(queries: DashboardQuery): Promise<any> {
+    const { status, search } = queries;
+    const queryBuilder = this.jobRepository
+      .createQueryBuilder('jobs')
+      .orderBy('jobs.createdAt', 'DESC');
+
+    if (status) {
+      queryBuilder.andWhere('jobs.status = :status', {
+        status,
+      });
+    }
+
+    if (search) {
+      queryBuilder.andWhere('jobs.name ILIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+    const jobs = queryBuilder.getMany();
+
+    return jobs;
   }
 }

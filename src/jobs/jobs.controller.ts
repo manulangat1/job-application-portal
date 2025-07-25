@@ -18,6 +18,8 @@ import { CreateJobApplicationDTO } from './dto/create-application';
 import { OkResponse } from '../common/dto/ok-response.dto';
 import { UpdateApplicationDTO } from './dto/update-application.dto';
 import { PaginationQueries } from './dto/job.query.dto';
+import { DashboardQuery } from '../dashboard/dto/DashboardQuery.dto';
+import { Public } from '../common/decorators/Public.decorator';
 
 @Controller('jobs')
 @ApiTags('Jobs')
@@ -84,5 +86,14 @@ export class JobsController {
     @CurrentUser() user: User,
   ): Promise<OkResponse> {
     return this.jobsService.delete(id, user);
+  }
+
+  @Get('search')
+  @Public()
+  async searchJobs(
+    @CurrentUser() user: User,
+    @Query() queries: DashboardQuery,
+  ): Promise<any> {
+    return this.jobsService.findWithQueries(queries);
   }
 }
