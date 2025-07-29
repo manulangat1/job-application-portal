@@ -25,9 +25,4 @@ export class AppconfigService {
   get jwtExpiresIn(): string {
     return this.configService.getOrThrow<string>('jwtExpiresIn');
   }
-
-  // allowedClientURLS = {
-  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  //   client: this.configService.getOrThrow('CLIENT_PORTAL_HOST_NAME'),
-  // };
 }
