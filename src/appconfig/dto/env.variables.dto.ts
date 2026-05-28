@@ -19,6 +19,11 @@ export class EnvironmentVariables {
   CLIENT_PORTAL_HOST_NAME: string;
 
   @Expose()
+  @IsUrl()
+  @IsNotEmpty()
+  BE_PORTAL_HOST_NAME: string;
+
+  @Expose()
   @IsString()
   @IsNotEmpty()
   jwtSecretKey: string;

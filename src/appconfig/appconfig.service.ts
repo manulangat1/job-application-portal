@@ -25,4 +25,8 @@ export class AppconfigService {
   get jwtExpiresIn(): string {
     return this.configService.getOrThrow<string>('jwtExpiresIn');
   }
+
+  get BEPortal(): string {
+    return this.configService.getOrThrow<string>('BE_PORTAL_HOST_NAME');
+  }
 }
