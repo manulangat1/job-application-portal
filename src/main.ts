@@ -44,9 +44,9 @@ async function bootstrap() {
   if (!isProductionEnvironment) enableOpenApiDocumentation(app, '1');
   // allowed clients
 
-  const { clientPortal } = app.get(AppconfigService);
+  const { clientPortal, BEPortal } = app.get(AppconfigService);
 
-  const allowedClientApplicationsOrigin: string[] = [clientPortal];
+  const allowedClientApplicationsOrigin: string[] = [clientPortal, BEPortal];
 
   app.enableCors({
     origin: (origin, callback): void => {
